@@ -1,72 +1,235 @@
-/* ページ全体のコンテナ */
-.project-hub-page {
-  max-width: 1200px;
-  margin: 40px auto; /* 上下に余白、左右は自動で中央揃え */
-  padding: 20px;
-  text-align: center;
+/* ===== ホームページ全体 ===== */
+.hub-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
 }
 
-/* メインタイトル */
-.hub-title {
-  font-size: 2.5rem; /* remはルート要素に対する倍率 */
-  font-weight: 700;
-  color: #2c3e50; /* 少し柔らかい黒 */
-  margin-bottom: 10px;
+/* ===== ヒーロー ===== */
+.hub-hero {
+    text-align: center;
+    padding: var(--space-8) 0 var(--space-4);
 }
 
-/* サブタイトル */
-.hub-subtitle {
-  font-size: 1.1rem;
-  color: #7f8c8d; /* グレー */
-  margin-bottom: 40px;
+.hub-hero__badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--color-accent-light);
+    color: var(--color-accent);
+    border: 1px solid rgba(59, 110, 248, 0.2);
+    border-radius: 999px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
 }
 
-/* カードを並べるグリッドコンテナ */
-.hub-cards-container {
-  display: grid;
-  /* 画面幅に応じて列数を自動調整 */
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px; /* カード間の余白 */
+.hub-hero__title {
+    font-size: 32px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: var(--space-4);
 }
 
-/* 個々のカードのスタイル */
-.hub-card {
-  display: block; /* リンク全体をクリック可能にする */
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 24px;
-  text-align: left;
-  text-decoration: none; /* リンクの下線を消す */
-  color: inherit; /* 親要素の色を継承 */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e0e0e0;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+.hub-hero__desc {
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
 }
 
-/* カードにマウスカーソルが乗った時の効果 */
-.hub-card:hover {
-  transform: translateY(-5px); /* 少し浮き上がる */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+/* ===== 操作パネル ===== */
+.hub-panel {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
 }
 
-/* カード内の見出し */
-.hub-card h2 {
-  font-size: 1.4rem;
-  color: #34495e;
-  margin-top: 0;
-  margin-bottom: 8px;
+/* ---- 読み込み済み状態 ---- */
+.hub-loaded {
+    padding: var(--space-6);
 }
 
-/* カード内の説明文 */
-.hub-card p {
-  font-size: 0.95rem;
-  color: #7f8c8d;
-  line-height: 1.6;
+.hub-loaded__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
 }
 
-/* 無効化されたカードのスタイル（将来用） */
-.hub-card--disabled {
-  background-color: #f8f9fa;
-  pointer-events: none; /* クリックできなくする */
-  opacity: 0.6;
+.hub-loaded__indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-success);
+    box-shadow: 0 0 0 3px var(--color-success-bg);
+    flex-shrink: 0;
+}
+
+.hub-loaded__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-success);
+}
+
+.hub-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    padding: var(--space-4);
+    background-color: var(--color-bg-sidebar);
+    border-radius: var(--radius-lg);
+}
+
+.hub-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 72px;
+    flex: 1;
+}
+
+.hub-stat__value {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    line-height: 1.2;
+}
+
+.hub-stat__label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+}
+
+.hub-loaded__actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+/* ---- 未読み込み状態 ---- */
+.hub-import {
+    padding: var(--space-10) var(--space-8);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.hub-import__icon {
+    font-size: 48px;
+    opacity: 0.5;
+}
+
+.hub-import__title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+.hub-import__desc {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    max-width: 360px;
+    line-height: 1.7;
+}
+
+.hub-import__actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hub-import__actions .btn-primary {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--font-size-base);
+}
+
+/* ===== アルゴリズム説明 ===== */
+.hub-algo {
+    padding: var(--space-2) 0;
+}
+
+.hub-algo__title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-5);
+}
+
+.hub-algo__steps {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.hub-step {
+    flex: 1;
+    min-width: 160px;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+.hub-step:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.hub-step__num {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-3);
+}
+
+.hub-step__body h3 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.hub-step__body p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+.hub-step__arrow {
+    display: flex;
+    align-items: center;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+    padding-top: var(--space-4);
+}
+
+@media (max-width: 680px) {
+    .hub-algo__steps {
+        flex-direction: column;
+    }
+    .hub-step__arrow {
+        transform: rotate(90deg);
+        align-self: center;
+        padding: 0;
+    }
 }

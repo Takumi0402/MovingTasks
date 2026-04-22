@@ -83,13 +83,12 @@ export function PathsPanel({ selectedPathKey, onPathSelect }: PathsPanelProps) {
     <div>
       <div className="collapsible-section">
         <h3 onClick={() => setIsAddPathOpen(!isAddPathOpen)}>
-          <span className="triangle">{isAddPathOpen ? "▼" : "▶"}</span> Add New Path
+          <span className="triangle">{isAddPathOpen ? "▼" : "▶"}</span> 経路を追加
         </h3>
         {isAddPathOpen && (
           <div className="add-node-form">
-            {/* ★ 5. グループフィルタ用のチェックボックスUIを追加 */}
             <div className="area-filter" style={{ marginBottom: "10px", paddingBottom: "10px", borderBottom: "1px solid #eee" }}>
-              <label>Filter nodes by area:</label>
+              <label>エリアで絞り込む:</label>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "5px" }}>
                 {allAreas.map((area) => (
                   <div key={area.key}>
@@ -102,12 +101,8 @@ export function PathsPanel({ selectedPathKey, onPathSelect }: PathsPanelProps) {
               </div>
             </div>
 
-            {/* ★ 6. プルダウンの選択肢を`filteredNodes`に変更 */}
             <select value={pathNode1} onChange={(e) => setPathNode1(e.target.value)}>
-              <option value="" disabled>
-                {" "}
-                -- Select Node 1 --{" "}
-              </option>
+              <option value="" disabled>-- 地点1を選択 --</option>
               {filteredNodes.map((node) => (
                 <option key={node.key} value={node.key}>
                   {node.key} ({node.areaKey})
@@ -115,19 +110,16 @@ export function PathsPanel({ selectedPathKey, onPathSelect }: PathsPanelProps) {
               ))}
             </select>
             <select value={pathNode2} onChange={(e) => setPathNode2(e.target.value)}>
-              <option value="" disabled>
-                {" "}
-                -- Select Node 2 --{" "}
-              </option>
+              <option value="" disabled>-- 地点2を選択 --</option>
               {filteredNodes.map((node) => (
                 <option key={node.key} value={node.key}>
                   {node.key} ({node.areaKey})
                 </option>
               ))}
             </select>
-            <input type="number" placeholder="Cost (Node1 → Node2)" value={newPathCost} onChange={(e) => setNewPathCost(e.target.value)} />
-            <input type="number" placeholder="Cost (Node2 → Node1)" value={newPathOppositeCost} onChange={(e) => setNewPathOppositeCost(e.target.value)} />
-            <button onClick={handleAddPath}>Add Path</button>
+            <input type="number" placeholder="コスト (地点1→地点2)" value={newPathCost} onChange={(e) => setNewPathCost(e.target.value)} />
+            <input type="number" placeholder="コスト (地点2→地点1)" value={newPathOppositeCost} onChange={(e) => setNewPathOppositeCost(e.target.value)} />
+            <button onClick={handleAddPath}>追加</button>
           </div>
         )}
       </div>
@@ -137,11 +129,11 @@ export function PathsPanel({ selectedPathKey, onPathSelect }: PathsPanelProps) {
         <table>
           <thead>
             <tr>
-              <th>From</th>
-              <th>To</th>
-              <th className="cost-column">Cost (From→To)</th>
-              <th className="cost-column">Cost (To→From)</th>
-              <th>Action</th>
+              <th>始点</th>
+              <th>終点</th>
+              <th className="cost-column">コスト (始→終)</th>
+              <th className="cost-column">コスト (終→始)</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -162,17 +154,17 @@ export function PathsPanel({ selectedPathKey, onPathSelect }: PathsPanelProps) {
                     <input type="number" value={path.cost} onChange={(e) => updatePathCost(pathKey, "forward", Number(e.target.value))} className="cost-input" />
                   </td>
                   <td>
-                    <input type="number" value={path.opposite_cost} onChange={(e) => updatePathCost(pathKey, "backward", Number(e.target.value))} className="cost-input" />
+                    <input type="number" value={path.oppositeCost} onChange={(e) => updatePathCost(pathKey, "backward", Number(e.target.value))} className="cost-input" />
                   </td>
                   <td>
                     <button
                       onClick={(e) => {
-                        e.stopPropagation(); // ★ 行全体のクリックイベントを発生させない
+                        e.stopPropagation();
                         handleDeletePath(canonicalKey);
                       }}
                       className="delete-button"
                     >
-                      Delete
+                      削除
                     </button>
                   </td>
                 </tr>

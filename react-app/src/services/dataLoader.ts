@@ -356,7 +356,7 @@ function linkNodesToAreas(areas: Map<string, Area>, points: ReadonlyMap<string, 
     allGraphNodes.forEach((node) => {
         const area = areas.get(node.areaKey);
         // AreaクラスのGraphNodesプロパティがミュータブル（書き換え可能）である前提
-        area?.GraphNodes.push(node);
+        area?.nodes.push(node);
     });
 }
 

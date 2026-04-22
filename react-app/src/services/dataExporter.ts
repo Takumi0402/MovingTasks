@@ -30,8 +30,8 @@ function generatePathsXml(paths: ReadonlyMap<string, Path>, waypoints: ReadonlyM
 
     const pathEntries = Array.from(paths.values())
         .map((p) => {
-            const cost1to2 = p.from.key < p.to.key ? p.cost : p.opposite_cost;
-            const cost2to1 = p.from.key < p.to.key ? p.opposite_cost : p.cost;
+            const cost1to2 = p.from.key < p.to.key ? p.cost : p.oppositeCost;
+            const cost2to1 = p.from.key < p.to.key ? p.oppositeCost : p.cost;
             return `    <Path Point1Key="${p.from.key}" Point2Key="${p.to.key}" Cost="${cost1to2}" OppositeCost="${cost2to1}" IsInternal="${p.isInternal}" />`;
         })
         .join("\n");

@@ -1,94 +1,99 @@
-/* src/pages/ServicePage.css */
-
-/* 以前の2パネル用レイアウトを、1パネル用に変更 */
-.service-page-container.single-panel {
-  display: flex;
-  flex-direction: column; /* 縦並びに変更 */
-  height: calc(100vh - 40px);
-  padding: 20px;
-  gap: 20px;
-}
-.detail-panel {
-  flex-grow: 1;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 0; /* テーブルが端まで使えるように調整 */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* テーブルのスクロールのため */
-}
-/* ツールバーのスタイル */
-.toolbar {
-  padding: 10px 20px;
-  border-bottom: 1px solid #ccc;
-  background-color: #f8f8f8;
-}
-.toolbar label {
-  margin-right: 10px;
-  font-weight: bold;
-}
-.toolbar select {
-  padding: 5px;
-  min-width: 200px;
+.service-page {
+    padding: var(--space-6);
+    height: calc(100vh - 105px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-/* テーブルのスタイル調整 */
-.inventory-table {
-  flex-grow: 1; /* 残りの高さいっぱいに広がる */
-  overflow-y: auto; /* 縦スクロールを可能に */
-  display: block;
-}
-.inventory-table thead,
-.inventory-table tfoot {
-  position: sticky; /* ヘッダーとフッターを固定 */
-  background-color: #f8f8f8;
-}
-.inventory-table thead {
-  top: 0;
-}
-.inventory-table tfoot {
-  bottom: 0;
+.service-layout {
+    display: flex;
+    gap: var(--space-5);
+    flex: 1;
+    min-height: 0;
 }
 
-.total-unmatched {
-  background-color: #fffbe6;
-  color: #c88910;
+.service-map-panel {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
-/* src/pages/ServicePage.css */
+.service-inventory-panel {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
 
-/* ★ 新しいカスタムノード用のスタイルを修正・追記 */
+/* ---- サービスマップノード ---- */
 .service-node {
-  width: 75px;
-  height: 75px;
-  padding: 10px;
-  border-radius: 50%; /* 円形にする */
-  background: white;
-  text-align: center;
-  /* 文字を中央に配置するためのFlexbox設定 */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.9em;
-  /* ★ ここでは、変化しない静的なスタイルのみを定義 */
-  border: 2px solid #1a192b; /* ← デフォルトの枠線 */
-  transition: all 0.15s ease-in-out; /* スムーズな変化のため */
+    width: 75px;
+    height: 75px;
+    padding: 8px;
+    border-radius: 50%;
+    background: var(--color-bg-card);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-size-xs);
+    border: 2px solid var(--color-border);
+    transition: all var(--transition-fast);
 }
 
 .service-node-name {
-  font-weight: bold;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
 }
 
 .service-node-quantity {
-  margin-top: 5px;
-  font-size: 1em;
-  color: #007bff;
-  font-weight: bold;
+    margin-top: 3px;
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+    font-weight: var(--font-weight-bold);
 }
 
-/* src/pages/ServicePage.css の末尾に追記 */
+/* ---- 在庫テーブル ---- */
+.inventory-table {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: block;
+}
+
+.inventory-table thead {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg-sidebar);
+    z-index: 1;
+}
+
+.inventory-table tfoot {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--color-bg-sidebar);
+}
+
+.total-unmatched {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning);
+}
 
 .inventory-table tr.focused td {
-  background-color: #e6f7ff; /* 薄い青色 */
+    background-color: var(--color-accent-light);
+}
+
+/* ---- ツールバー ---- */
+.toolbar {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.toolbar label {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    margin-right: var(--space-2);
+    font-size: var(--font-size-sm);
 }

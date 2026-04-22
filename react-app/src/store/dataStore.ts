@@ -151,61 +151,29 @@ export const useAppStore = create<AppState>((set, get) => {
             }),
 
         deleteObjectCategory: (keyToDelete: string) => {
-            console.log("--- 1. deleteObjectCategory アクション開始 ---", { keyToDelete });
-
             const currentData = get().data;
-            if (!currentData) {
-                console.warn("デバッグ: currentDataが存在しないため処理を中断。");
-                return;
-            }
+            if (!currentData) return;
 
             const categoryToDelete = currentData.objectCategories.get(keyToDelete);
-
             if (!categoryToDelete) {
-                console.warn(`デバッグ: カテゴリキー "${keyToDelete}" が見つかりませんでした。`);
-                // toast.errorはここにあるので、もしこのメッセージが出るならtoast自体は機能している
                 toast.error(`エラー: カテゴリキー "${keyToDelete}" が見つかりません。`);
                 return;
             }
-
-            console.log("--- 2. 削除対象のカテゴリを発見 ---", { categoryToDelete });
 
             const newObjectCategories = new Map(currentData.objectCategories);
             newObjectCategories.delete(keyToDelete);
 
             const newPoints = new Map(currentData.points);
-            let pointsWereUpdated = false; // ★ ポイントが更新されたかを追跡するフラグ
-
             for (const [pointKey, point] of newPoints.entries()) {
                 if (point.objects.has(categoryToDelete)) {
-                    console.log(`--- 3. Point "${pointKey}" からカテゴリ "${keyToDelete}" を削除します ---`);
-                    pointsWereUpdated = true; // ★ 更新があったことを記録
-
                     const newPointObjects = new Map(point.objects);
                     newPointObjects.delete(categoryToDelete);
-
-                    const updatedPoint = new Point(point.key, point.name, point.areaKey, point.x, point.y, newPointObjects, point.storage);
-                    newPoints.set(pointKey, updatedPoint);
+                    newPoints.set(pointKey, new Point(point.key, point.name, point.areaKey, point.x, point.y, newPointObjects, point.storage));
                 }
             }
 
-            if (pointsWereUpdated) {
-                console.log("--- 4. ポイントの更新がありました ---", { newPoints });
-            } else {
-                console.log("--- 4. どのポイントにも削除対象のカテゴリはありませんでした ---");
-            }
-
-            const newData = currentData.withNewObjectCategories(newObjectCategories).withNewPoints(newPoints);
-
-            console.log("--- 5. 新しいDataオブジェクトを生成しました ---");
-
-            set({ data: newData });
-
-            console.log("--- 6. set({ data: newData }) を呼び出しました ---");
-
+            set({ data: currentData.withNewObjectCategories(newObjectCategories).withNewPoints(newPoints) });
             toast.success(`備品カテゴリ "${categoryToDelete.name}" を関連データごと削除しました。`);
-
-            console.log("--- 7. toast.success() が呼び出されました ---");
         },
 
         // --- Area（グループ）系アクション ---
@@ -439,7 +407,7 @@ export const useAppStore = create<AppState>((set, get) => {
                 const path_to_update = newPaths.get(pathKey);
 
                 if (path_to_update) {
-                    const newPath = new Path(path_to_update.from, path_to_update.to, direction === "forward" ? newCost : path_to_update.cost, direction === "backward" ? newCost : path_to_update.opposite_cost);
+                    const newPath = new Path(path_to_update.from, path_to_update.to, direction === "forward" ? newCost : path_to_update.cost, direction === "backward" ? newCost : path_to_update.oppositeCost);
                     newPaths.set(pathKey, newPath);
                     return { data: state.data.withNewPaths(newPaths), isRouteStale: true };
                 }

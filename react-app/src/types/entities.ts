@@ -109,7 +109,7 @@ export class Area {
     /** グループの説明文 */
     description: string;
     /** このグループに所属するGraphNode（PointまたはWaypoint）のリスト */
-    readonly GraphNodes: GraphNode[] = [];
+    readonly nodes: GraphNode[] = [];
 
     constructor(key: string, name: string, description: string) {
         this.key = key;
@@ -131,17 +131,17 @@ export class Path {
     to: GraphNode;
     /** 移動にかかるコスト */
     cost: number;
-    opposite_cost: number;
+    oppositeCost: number;
     /** 建物内部の経路など、特殊な経路かどうかのフラグ */
     isInternal: boolean;
     /** 通行禁止の経路かどうかのフラグ */
     isProhibited: boolean;
 
-    constructor(from: GraphNode, to: GraphNode, cost: number, opposite_cost: number, isInternal: boolean = false, isProhibited: boolean = false) {
+    constructor(from: GraphNode, to: GraphNode, cost: number, oppositeCost: number, isInternal: boolean = false, isProhibited: boolean = false) {
         this.from = from;
         this.to = to;
         this.cost = cost;
-        this.opposite_cost = opposite_cost;
+        this.oppositeCost = oppositeCost;
         this.isInternal = isInternal;
         this.isProhibited = isProhibited;
     }

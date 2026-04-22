@@ -37,7 +37,7 @@ export function calculateAllPointToPointRoutes(points: ReadonlyMap<string, Point
   const adj: Map<string, { to: string; cost: number }[]> = new Map();
   paths.forEach((path) => {
     adj.set(path.from.key, [...(adj.get(path.from.key) || []), { to: path.to.key, cost: path.cost }]);
-    adj.set(path.to.key, [...(adj.get(path.to.key) || []), { to: path.from.key, cost: path.opposite_cost }]);
+    adj.set(path.to.key, [...(adj.get(path.to.key) || []), { to: path.from.key, cost: path.oppositeCost }]);
   });
 
   // --- すべてのPointを始点としてループ ---

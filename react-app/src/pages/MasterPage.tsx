@@ -1,5 +1,3 @@
-// src/pages/MasterPage.tsx
-
 import { useState } from "react";
 import { useAppStore } from "../store/dataStore";
 import { ObjectEditor } from "../components/editor/ObjectEditor.tsx";
@@ -7,6 +5,7 @@ import { GraphEditor } from "../components/editor/GraphEditor.tsx";
 import { DataInspector } from "../components/editor/DataInspector";
 import { NoData } from "../components/layout/NoData.tsx";
 import { Tabs } from "../components/editor/Tabs.tsx";
+import "./MasterPage.css";
 
 const TABS = [
     { id: "points", label: "グラフ" },
@@ -18,43 +17,50 @@ export function MasterPage() {
     const [activeTab, setActiveTab] = useState<string>(TABS[0].id);
     const [selectedNodeKey, setSelectedNodeKey] = useState<string | null>(null);
     const [selectedPathKey, setSelectedPathKey] = useState<string | null>(null);
-
     const [isInspectorOpen, setIsInspectorOpen] = useState(true);
 
-    if (!data) {
-        return <NoData />;
-    }
+    if (!data) return <NoData />;
 
     return (
-        <div style={{ padding: "20px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h1>マスタデータ編集</h1>
-                {/* ★ 2. 開閉を切り替えるボタン */}
-                {/* "points"タブがアクティブな時だけボタンを表示 */}
-                {activeTab === "points" && <button onClick={() => setIsInspectorOpen(!isInspectorOpen)}>{isInspectorOpen ? "インスペクターを隠す" : "インスペクターを表示"}</button>}
+        <div className="master-page">
+            <div className="page-header">
+                <div>
+                    <h1 className="page-title">マスタデータ編集</h1>
+                    <p className="page-subtitle">地点・経路・備品カテゴリの定義とグラフ構造の編集</p>
+                </div>
+                {activeTab === "points" && (
+                    <button onClick={() => setIsInspectorOpen(!isInspectorOpen)}>
+                        {isInspectorOpen ? "インスペクターを隠す" : "インスペクターを表示"}
+                    </button>
+                )}
             </div>
 
             <Tabs tabs={TABS} activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            <div>
-                {activeTab === "objects" && <ObjectEditor />}
+            {activeTab === "objects" && <ObjectEditor />}
 
-                {activeTab === "points" && (
-                    <div style={{ display: "flex", gap: "20px", height: "80vh" }}>
-                        {/* 左側：グラフエディタ */}
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <GraphEditor selectedNodeKey={selectedNodeKey} onNodeSelect={setSelectedNodeKey} selectedPathKey={selectedPathKey} onPathSelect={setSelectedPathKey} />
-                        </div>
-
-                        {/* ★ 3. isInspectorOpenがtrueの時だけインスペクターパネルを描画 */}
-                        {isInspectorOpen && (
-                            <div style={{ width: "630px", minWidth: "350px" }}>
-                                <DataInspector selectedNodeKey={selectedNodeKey} onNodeSelect={setSelectedNodeKey} selectedPathKey={selectedPathKey} onPathSelect={setSelectedPathKey} />
-                            </div>
-                        )}
+            {activeTab === "points" && (
+                <div className="master-graph-layout">
+                    <div className="master-graph-editor">
+                        <GraphEditor
+                            selectedNodeKey={selectedNodeKey}
+                            onNodeSelect={setSelectedNodeKey}
+                            selectedPathKey={selectedPathKey}
+                            onPathSelect={setSelectedPathKey}
+                        />
                     </div>
-                )}
-            </div>
+                    {isInspectorOpen && (
+                        <div className="master-inspector">
+                            <DataInspector
+                                selectedNodeKey={selectedNodeKey}
+                                onNodeSelect={setSelectedNodeKey}
+                                selectedPathKey={selectedPathKey}
+                                onPathSelect={setSelectedPathKey}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
