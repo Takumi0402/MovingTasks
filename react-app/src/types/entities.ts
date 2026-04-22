@@ -8,15 +8,15 @@
  * (Objects.xml -> <ObjectCategory>)
  */
 export class ObjectCategory {
-  /** 識別子となるユニークなキー */
-  readonly key: string;
-  /** カテゴリの表示名 */
-  name: string;
+    /** 識別子となるユニークなキー */
+    readonly key: string;
+    /** カテゴリの表示名 */
+    name: string;
 
-  constructor(key: string, name: string) {
-    this.key = key;
-    this.name = name;
-  }
+    constructor(key: string, name: string) {
+        this.key = key;
+        this.name = name;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -26,15 +26,15 @@ export class ObjectCategory {
  * ((Point).xml -> <Object>)
  */
 export class QuantityChange {
-  /** 変化前の数量 */
-  fromAmount: number;
-  /** 変化後の数量 */
-  toAmount: number;
+    /** 変化前の数量 */
+    fromAmount: number;
+    /** 変化後の数量 */
+    toAmount: number;
 
-  constructor(fromAmount: number, toAmount: number) {
-    this.fromAmount = fromAmount;
-    this.toAmount = toAmount;
-  }
+    constructor(fromAmount: number, toAmount: number) {
+        this.fromAmount = fromAmount;
+        this.toAmount = toAmount;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -44,20 +44,20 @@ export class QuantityChange {
  * Point（拠点）とWaypoint（経由地）がこのクラスを継承します。
  */
 export abstract class GraphNode {
-  /** 識別子となるユニークなキー */
-  readonly key: string;
-  /** 所属するグループのキー */
-  readonly areaKey: string;
+    /** 識別子となるユニークなキー */
+    readonly key: string;
+    /** 所属するグループのキー */
+    readonly areaKey: string;
 
-  x: number;
-  y: number;
+    x: number;
+    y: number;
 
-  protected constructor(key: string, areaKey: string, x: number = 0, y: number = 0) {
-    this.key = key;
-    this.areaKey = areaKey;
-    this.x = x;
-    this.y = y;
-  }
+    protected constructor(key: string, areaKey: string, x: number = 0, y: number = 0) {
+        this.key = key;
+        this.areaKey = areaKey;
+        this.x = x;
+        this.y = y;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -67,16 +67,19 @@ export abstract class GraphNode {
  * ((Point).xml -> <Point>)
  */
 export class Point extends GraphNode {
-  /** 拠点の表示名 */
-  name: string;
-  /** この拠点で数量が変化する物品とその内容のマップ */
-  readonly objects: ReadonlyMap<ObjectCategory, QuantityChange>;
+    /** 拠点の表示名 */
+    name: string;
+    /** 保管庫属性（需要ノードとして扱うときに制約緩和を許可） */
+    storage: boolean;
+    /** この拠点で数量が変化する物品とその内容のマップ */
+    readonly objects: ReadonlyMap<ObjectCategory, QuantityChange>;
 
-  constructor(key: string, name: string, areaKey: string, x: number = 0, y: number = 0, objects: Map<ObjectCategory, QuantityChange>) {
-    super(key, areaKey, x, y);
-    this.name = name;
-    this.objects = objects;
-  }
+    constructor(key: string, name: string, areaKey: string, x: number = 0, y: number = 0, objects: Map<ObjectCategory, QuantityChange>, storage: boolean = false) {
+        super(key, areaKey, x, y);
+        this.name = name;
+        this.storage = storage;
+        this.objects = objects;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -86,10 +89,10 @@ export class Point extends GraphNode {
  * (Paths.xml -> <Waypoint>)
  */
 export class Waypoint extends GraphNode {
-  // WaypointはKeyとAreaKey以外の固有情報を持ちません
-  constructor(key: string, areaKey: string, x: number = 0, y: number = 0) {
-    super(key, areaKey, x, y);
-  }
+    // WaypointはKeyとAreaKey以外の固有情報を持ちません
+    constructor(key: string, areaKey: string, x: number = 0, y: number = 0) {
+        super(key, areaKey, x, y);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -99,20 +102,20 @@ export class Waypoint extends GraphNode {
  * (Areas.xml -> <ObjectArea>)
  */
 export class Area {
-  /** 識別子となるユニークなキー */
-  readonly key: string;
-  /** グループの表示名 */
-  name: string;
-  /** グループの説明文 */
-  description: string;
-  /** このグループに所属するGraphNode（PointまたはWaypoint）のリスト */
-  readonly GraphNodes: GraphNode[] = [];
+    /** 識別子となるユニークなキー */
+    readonly key: string;
+    /** グループの表示名 */
+    name: string;
+    /** グループの説明文 */
+    description: string;
+    /** このグループに所属するGraphNode（PointまたはWaypoint）のリスト */
+    readonly GraphNodes: GraphNode[] = [];
 
-  constructor(key: string, name: string, description: string) {
-    this.key = key;
-    this.name = name;
-    this.description = description;
-  }
+    constructor(key: string, name: string, description: string) {
+        this.key = key;
+        this.name = name;
+        this.description = description;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -122,93 +125,93 @@ export class Area {
  * (Paths.xml -> <Path>)
  */
 export class Path {
-  /** 出発点 */
-  from: GraphNode;
-  /** 到着点 */
-  to: GraphNode;
-  /** 移動にかかるコスト */
-  cost: number;
-  opposite_cost: number;
-  /** 建物内部の経路など、特殊な経路かどうかのフラグ */
-  isInternal: boolean;
-  /** 通行禁止の経路かどうかのフラグ */
-  isProhibited: boolean;
+    /** 出発点 */
+    from: GraphNode;
+    /** 到着点 */
+    to: GraphNode;
+    /** 移動にかかるコスト */
+    cost: number;
+    opposite_cost: number;
+    /** 建物内部の経路など、特殊な経路かどうかのフラグ */
+    isInternal: boolean;
+    /** 通行禁止の経路かどうかのフラグ */
+    isProhibited: boolean;
 
-  constructor(from: GraphNode, to: GraphNode, cost: number, opposite_cost: number, isInternal: boolean = false, isProhibited: boolean = false) {
-    this.from = from;
-    this.to = to;
-    this.cost = cost;
-    this.opposite_cost = opposite_cost;
-    this.isInternal = isInternal;
-    this.isProhibited = isProhibited;
-  }
+    constructor(from: GraphNode, to: GraphNode, cost: number, opposite_cost: number, isInternal: boolean = false, isProhibited: boolean = false) {
+        this.from = from;
+        this.to = to;
+        this.cost = cost;
+        this.opposite_cost = opposite_cost;
+        this.isInternal = isInternal;
+        this.isProhibited = isProhibited;
+    }
 }
 
 export class Route {
-  public readonly key: string; // 例: "startNodeKey_endNodeKey"
-  public readonly from: string; // 開始ノードキー
-  public readonly to: string; // 終了ノードキー
-  public readonly distance: number;
-  public readonly nodeKeys: readonly string[]; // 経由するノードキーの配列
+    public readonly key: string; // 例: "startNodeKey_endNodeKey"
+    public readonly from: string; // 開始ノードキー
+    public readonly to: string; // 終了ノードキー
+    public readonly distance: number;
+    public readonly nodeKeys: readonly string[]; // 経由するノードキーの配列
 
-  constructor(from: string, to: string, distance: number, nodeKeys: string[]) {
-    this.key = `${from}_${to}`;
-    this.from = from;
-    this.to = to;
-    this.distance = distance;
-    this.nodeKeys = nodeKeys;
-  }
+    constructor(from: string, to: string, distance: number, nodeKeys: string[]) {
+        this.key = `${from}_${to}`;
+        this.from = from;
+        this.to = to;
+        this.distance = distance;
+        this.nodeKeys = nodeKeys;
+    }
 }
 
 /**
  * 最適化計算によって生成された個別の輸送タスクを表します。
  */
 export class Task {
-  /**
-   * タスクの一意な識別子。
-   * 例: "fromPointKey_toPointKey_objectCategoryKey"
-   */
-  public readonly id: string;
+    /**
+     * タスクの一意な識別子。
+     * 例: "fromPointKey_toPointKey_objectCategoryKey"
+     */
+    public readonly id: string;
 
-  /** 輸送元となる拠点のキー */
-  public readonly fromPoint: string;
+    /** 輸送元となる拠点のキー */
+    public readonly fromPoint: string;
 
-  /** 輸送先となる拠点のキー */
-  public readonly toPoint: string;
+    /** 輸送先となる拠点のキー */
+    public readonly toPoint: string;
 
-  /** 輸送対象の備品カテゴリ */
-  public readonly object: ObjectCategory;
+    /** 輸送対象の備品カテゴリ */
+    public readonly object: ObjectCategory;
 
-  /** 輸送する数量 */
-  public count: number;
+    /** 輸送する数量 */
+    public count: number;
 
-  /** このタスクの重み（例: 経路コスト × 数量） */
-  public taskWeight: number;
+    /** このタスクの重み（例: 経路コスト × 数量） */
+    public taskWeight: number;
 
-  /** メモ（将来的な拡張用） */
-  public notes: string;
+    /** メモ（将来的な拡張用） */
+    public notes: string;
 
-  /** このタスクと両立できないタスクのリスト（将来的な拡張用） */
-  public prohibitedTaskIds: string[];
+    /** このタスクと両立できないタスクのリスト（将来的な拡張用） */
+    public prohibitedTaskIds: string[];
 
-  constructor(
-    fromPoint: string,
-    toPoint: string,
-    object: ObjectCategory,
-    count: number,
-    taskWeight: number,
-    notes: string = "", // デフォルト値
-    prohibitedTaskIds: string[] = [] // デフォルト値
-  ) {
-    // 方法1（複合キー）でIDを自動生成
-    this.id = `${fromPoint}_${toPoint}_${object.key}`;
+    constructor(
+        fromPoint: string,
+        toPoint: string,
+        object: ObjectCategory,
+        count: number,
+        taskWeight: number,
+        notes: string = "", // デフォルト値
+        prohibitedTaskIds: string[] = [], // デフォルト値
+    ) {
+        // 方法1（複合キー）でIDを自動生成
+        this.id = `${fromPoint}_${toPoint}_${object.key}`;
 
-    this.fromPoint = fromPoint;
-    this.toPoint = toPoint;
-    this.object = object;
-    this.count = count;
-    this.taskWeight = taskWeight;
-    this.notes = notes;
-    this.prohibitedTaskIds = prohibitedTaskIds;
-  }
+        this.fromPoint = fromPoint;
+        this.toPoint = toPoint;
+        this.object = object;
+        this.count = count;
+        this.taskWeight = taskWeight;
+        this.notes = notes;
+        this.prohibitedTaskIds = prohibitedTaskIds;
+    }
 }

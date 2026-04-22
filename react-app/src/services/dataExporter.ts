@@ -8,59 +8,59 @@ import type { Area, ObjectCategory, Path, Point, Waypoint, Route, Task } from ".
 // --- XML生成関数群 ---
 
 function generateAreasXml(areas: ReadonlyMap<string, Area>): string {
-  const areaEntries = Array.from(areas.values())
-    .map((g) => `    <ObjectArea Key="${g.key}" Name="${g.name}" Description="${g.description}" />`)
-    .join("\n");
+    const areaEntries = Array.from(areas.values())
+        .map((g) => `    <ObjectArea Key="${g.key}" Name="${g.name}" Description="${g.description}" />`)
+        .join("\n");
 
-  return `<AreaCollection>\n  <Areas>\n${areaEntries}\n  </Areas>\n</AreaCollection>`;
+    return `<AreaCollection>\n  <Areas>\n${areaEntries}\n  </Areas>\n</AreaCollection>`;
 }
 
 function generateObjectsXml(categories: ReadonlyMap<string, ObjectCategory>): string {
-  const categoryEntries = Array.from(categories.values())
-    .map((c) => `    <ObjectCategory Key="${c.key}" Name="${c.name}" />`)
-    .join("\n");
+    const categoryEntries = Array.from(categories.values())
+        .map((c) => `    <ObjectCategory Key="${c.key}" Name="${c.name}" />`)
+        .join("\n");
 
-  return `<ObjectCollection>\n  <Categories>\n${categoryEntries}\n  </Categories>\n</ObjectCollection>`;
+    return `<ObjectCollection>\n  <Categories>\n${categoryEntries}\n  </Categories>\n</ObjectCollection>`;
 }
 
 function generatePathsXml(paths: ReadonlyMap<string, Path>, waypoints: ReadonlyMap<string, Waypoint>): string {
-  const waypointEntries = Array.from(waypoints.values())
-    .map((w) => `    <Waypoint Key="${w.key}" AreaKey="${w.areaKey}" x="${w.x}" y="${w.y}" />`)
-    .join("\n");
+    const waypointEntries = Array.from(waypoints.values())
+        .map((w) => `    <Waypoint Key="${w.key}" AreaKey="${w.areaKey}" x="${w.x}" y="${w.y}" />`)
+        .join("\n");
 
-  const pathEntries = Array.from(paths.values())
-    .map((p) => {
-      const cost1to2 = p.from.key < p.to.key ? p.cost : p.opposite_cost;
-      const cost2to1 = p.from.key < p.to.key ? p.opposite_cost : p.cost;
-      return `    <Path Point1Key="${p.from.key}" Point2Key="${p.to.key}" Cost="${cost1to2}" OppositeCost="${cost2to1}" IsInternal="${p.isInternal}" />`;
-    })
-    .join("\n");
+    const pathEntries = Array.from(paths.values())
+        .map((p) => {
+            const cost1to2 = p.from.key < p.to.key ? p.cost : p.opposite_cost;
+            const cost2to1 = p.from.key < p.to.key ? p.opposite_cost : p.cost;
+            return `    <Path Point1Key="${p.from.key}" Point2Key="${p.to.key}" Cost="${cost1to2}" OppositeCost="${cost2to1}" IsInternal="${p.isInternal}" />`;
+        })
+        .join("\n");
 
-  return `<PathCollection>\n  <Waypoints>\n${waypointEntries}\n  </Waypoints>\n  <Paths>\n${pathEntries}\n  </Paths>\n</PathCollection>`;
+    return `<PathCollection>\n  <Waypoints>\n${waypointEntries}\n  </Waypoints>\n  <Paths>\n${pathEntries}\n  </Paths>\n</PathCollection>`;
 }
 
 function generatePointXml(point: Point): string {
-  const objectEntries = Array.from(point.objects.entries())
-    .map(([category, change]) => `    <Object CategoryKey="${category.key}" From="${change.fromAmount}" To="${change.toAmount}" />`)
-    .join("\n");
+    const objectEntries = Array.from(point.objects.entries())
+        .map(([category, change]) => `    <Object CategoryKey="${category.key}" From="${change.fromAmount}" To="${change.toAmount}" />`)
+        .join("\n");
 
-  return `<Point AreaKey="${point.areaKey}" x="${point.x}" y="${point.y}">\n  <Key>${point.key}</Key>\n  <Name>${point.name}</Name>\n  <Objects>\n${objectEntries}\n  </Objects>\n</Point>`;
+    return `<Point AreaKey="${point.areaKey}" x="${point.x}" y="${point.y}" Storage="${point.storage}">\n  <Key>${point.key}</Key>\n  <Name>${point.name}</Name>\n  <Objects>\n${objectEntries}\n  </Objects>\n</Point>`;
 }
 
 function generateRoutesXml(routes: ReadonlyMap<string, Route>): string {
-  const routeEntries = Array.from(routes.values())
-    .map((route) => {
-      const nodeEntries = route.nodeKeys.map((key) => `        <Node key="${key}" />`).join("\n");
+    const routeEntries = Array.from(routes.values())
+        .map((route) => {
+            const nodeEntries = route.nodeKeys.map((key) => `        <Node key="${key}" />`).join("\n");
 
-      return `    <Route from="${route.from}" to="${route.to}" distance="${route.distance}">
+            return `    <Route from="${route.from}" to="${route.to}" distance="${route.distance}">
       <Path>
 ${nodeEntries}
       </Path>
     </Route>`;
-    })
-    .join("\n\n");
+        })
+        .join("\n\n");
 
-  return `<RouteCollection>\n  <Routes>\n${routeEntries}\n  </Routes>\n</RouteCollection>`;
+    return `<RouteCollection>\n  <Routes>\n${routeEntries}\n  </Routes>\n</RouteCollection>`;
 }
 
 /**
@@ -69,21 +69,21 @@ ${nodeEntries}
  * @returns Tasks.xmlの内容の文字列
  */
 function generateTasksXml(tasks: ReadonlyMap<string, Task>): string {
-  const taskEntries = Array.from(tasks.values())
-    .map((task) => {
-      // prohibitedTaskIdsのリストからXML要素を生成
-      const prohibitedEntries = task.prohibitedTaskIds.map((id) => `        <ProhibitedTask id="${id}"/>`).join("\n");
+    const taskEntries = Array.from(tasks.values())
+        .map((task) => {
+            // prohibitedTaskIdsのリストからXML要素を生成
+            const prohibitedEntries = task.prohibitedTaskIds.map((id) => `        <ProhibitedTask id="${id}"/>`).join("\n");
 
-      // 禁止タスクがある場合のみProhibitedTasksブロックを生成
-      const prohibitedBlock =
-        task.prohibitedTaskIds.length > 0
-          ? `
+            // 禁止タスクがある場合のみProhibitedTasksブロックを生成
+            const prohibitedBlock =
+                task.prohibitedTaskIds.length > 0
+                    ? `
       <ProhibitedTasks>
 ${prohibitedEntries}
       </ProhibitedTasks>`
-          : "";
+                    : "";
 
-      return `    <Task 
+            return `    <Task 
       id="${task.id}" 
       fromPoint="${task.fromPoint}" 
       toPoint="${task.toPoint}" 
@@ -93,10 +93,10 @@ ${prohibitedEntries}
       notes="${task.notes}">
 ${prohibitedBlock}
     </Task>`;
-    })
-    .join("\n\n");
+        })
+        .join("\n\n");
 
-  return `<TaskCollection>\n  <Tasks>\n${taskEntries}\n  </Tasks>\n</TaskCollection>`;
+    return `<TaskCollection>\n  <Tasks>\n${taskEntries}\n  </Tasks>\n</TaskCollection>`;
 }
 
 /**
@@ -105,32 +105,32 @@ ${prohibitedBlock}
  * @param fileName ダウンロードするファイル名
  */
 export async function exportDataToZip(data: Data, fileName: string = "exported_data.zip"): Promise<void> {
-  const zip = new JSZip();
+    const zip = new JSZip();
 
-  // 各XMLファイルの文字列を生成
-  const areasXml = generateAreasXml(data.areas);
-  const objectsXml = generateObjectsXml(data.objectCategories);
-  const pathsXml = generatePathsXml(data.paths, data.waypoints);
-  const routesXml = generateRoutesXml(data.routes);
-  const tasksXml = generateTasksXml(data.tasks);
+    // 各XMLファイルの文字列を生成
+    const areasXml = generateAreasXml(data.areas);
+    const objectsXml = generateObjectsXml(data.objectCategories);
+    const pathsXml = generatePathsXml(data.paths, data.waypoints);
+    const routesXml = generateRoutesXml(data.routes);
+    const tasksXml = generateTasksXml(data.tasks);
 
-  // メインのXMLファイルをZIPに追加
-  zip.file("Areas.xml", areasXml);
-  zip.file("Objects.xml", objectsXml);
-  zip.file("Paths.xml", pathsXml);
-  zip.file("Routes.xml", routesXml);
-  zip.file("Tasks.xml", tasksXml);
+    // メインのXMLファイルをZIPに追加
+    zip.file("Areas.xml", areasXml);
+    zip.file("Objects.xml", objectsXml);
+    zip.file("Paths.xml", pathsXml);
+    zip.file("Routes.xml", routesXml);
+    zip.file("Tasks.xml", tasksXml);
 
-  // 各Pointを個別のXMLファイルとしてPoints/ディレクトリに追加
-  const pointsFolder = zip.folder("Points");
-  if (pointsFolder) {
-    for (const point of data.points.values()) {
-      const pointXml = generatePointXml(point);
-      pointsFolder.file(`${point.key}.xml`, pointXml);
+    // 各Pointを個別のXMLファイルとしてPoints/ディレクトリに追加
+    const pointsFolder = zip.folder("Points");
+    if (pointsFolder) {
+        for (const point of data.points.values()) {
+            const pointXml = generatePointXml(point);
+            pointsFolder.file(`${point.key}.xml`, pointXml);
+        }
     }
-  }
 
-  // ZIPファイルを生成してダウンロード
-  const content = await zip.generateAsync({ type: "blob" });
-  saveAs(content, fileName);
+    // ZIPファイルを生成してダウンロード
+    const content = await zip.generateAsync({ type: "blob" });
+    saveAs(content, fileName);
 }

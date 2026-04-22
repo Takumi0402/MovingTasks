@@ -38,12 +38,13 @@ class ObjectCategoryModel(BaseModel):
 class PointModel(BaseModel):
     key: str
     name: str
-    groupKey: str
+    areaKey: str
     x: float
     y: float
     # JSONのキーは文字列であるため、dict[str, ...] で受け取る
     # strの部分はObjectCategoryのkeyが入る想定
     objects: dict[str, QuantityChangeModel]
+    storage: bool = False
 
 class RouteModel(BaseModel):
     key: str
@@ -120,10 +121,16 @@ def solve_dynamic_problem(data: ProblemDataModel): # 引数でデータを受け
 
         # 制約条件
         for s_key, s_amount in supply_nodes.items():
-            prob += pulp.lpSum([route_vars[(s_key, d_key)] for d_key in demand_nodes]) <= s_amount
+            prob += pulp.lpSum([route_vars[(s_key, d_key)] for d_key in demand_nodes]) == s_amount
         
         for d_key, d_amount in demand_nodes.items():
-            prob += pulp.lpSum([route_vars[(s_key, d_key)] for s_key in supply_nodes]) == d_amount
+            # 保管庫属性が付いた需要ノードは上限制約（<=）に緩和
+            point = data.points[d_key]
+            change = point.objects[category_key].toAmount - point.objects[category_key].fromAmount
+            if point.storage and change > 0:
+                prob += pulp.lpSum([route_vars[(s_key, d_key)] for s_key in supply_nodes]) <= d_amount
+            else:
+                prob += pulp.lpSum([route_vars[(s_key, d_key)] for s_key in supply_nodes]) == d_amount
 
         M = sum(supply_nodes.values())
         for r in route_keys:
@@ -173,9 +180,9 @@ def solve_dynamic_problem_fast(data: ProblemDataModel):
             if category_key in point.objects:
                 change = point.objects[category_key].toAmount - point.objects[category_key].fromAmount
                 if change < 0: # 供給地 (在庫が増える)
-                    demand_nodes[point_key] = -change
+                    supply_nodes[point_key] = -change
                 elif change > 0: # 需要地 (在庫が減る)
-                    supply_nodes[point_key] = +change # 需要量は正の値にする
+                    demand_nodes[point_key] = +change # 需要量は正の値にする
         
         print(f"Extracted Supply Nodes: {supply_nodes}")
         print(f"Extracted Demand Nodes: {demand_nodes}")
@@ -200,10 +207,16 @@ def solve_dynamic_problem_fast(data: ProblemDataModel):
 
         # 制約条件
         for s_key, s_amount in supply_nodes.items():
-            prob += pulp.lpSum([route_vars[(s_key, d_key)] for d_key in demand_nodes]) <= s_amount
+            prob += pulp.lpSum([route_vars[(s_key, d_key)] for d_key in demand_nodes]) == s_amount
         
         for d_key, d_amount in demand_nodes.items():
-            prob += pulp.lpSum([route_vars[(s_key, d_key)] for s_key in supply_nodes]) == d_amount
+            # 保管庫属性が付いた需要ノードは上限制約（<=）に緩和
+            point = data.points[d_key]
+            change = point.objects[category_key].toAmount - point.objects[category_key].fromAmount
+            if point.storage and change > 0:
+                prob += pulp.lpSum([route_vars[(s_key, d_key)] for s_key in supply_nodes]) <= d_amount
+            else:
+                prob += pulp.lpSum([route_vars[(s_key, d_key)] for s_key in supply_nodes]) == d_amount
 
         M = sum(supply_nodes.values())
         for r in route_keys:
