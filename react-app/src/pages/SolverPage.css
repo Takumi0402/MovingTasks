@@ -1,7 +1,0 @@
-.solver-page {
-    padding: var(--space-6);
-    height: calc(100vh - 105px);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
