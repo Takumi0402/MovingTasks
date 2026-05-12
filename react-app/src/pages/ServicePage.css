@@ -1,0 +1,99 @@
+.service-page {
+    padding: var(--space-6);
+    height: calc(100vh - 105px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.service-layout {
+    display: flex;
+    gap: var(--space-5);
+    flex: 1;
+    min-height: 0;
+}
+
+.service-map-panel {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.service-inventory-panel {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ---- サービスマップノード ---- */
+.service-node {
+    width: 75px;
+    height: 75px;
+    padding: 8px;
+    border-radius: 50%;
+    background: var(--color-bg-card);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-size-xs);
+    border: 2px solid var(--color-border);
+    transition: all var(--transition-fast);
+}
+
+.service-node-name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.service-node-quantity {
+    margin-top: 3px;
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+    font-weight: var(--font-weight-bold);
+}
+
+/* ---- 在庫テーブル ---- */
+.inventory-table {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: block;
+}
+
+.inventory-table thead {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg-sidebar);
+    z-index: 1;
+}
+
+.inventory-table tfoot {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--color-bg-sidebar);
+}
+
+.total-unmatched {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.inventory-table tr.focused td {
+    background-color: var(--color-accent-light);
+}
+
+/* ---- ツールバー ---- */
+.toolbar {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.toolbar label {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    margin-right: var(--space-2);
+    font-size: var(--font-size-sm);
+}

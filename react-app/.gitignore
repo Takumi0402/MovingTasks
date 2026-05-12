@@ -17,6 +17,12 @@ dist-ssr/
 # TypeScriptのビルドキャッシュ
 *.tsbuildinfo
 
+<<<<<<< HEAD
+=======
+# pyodideのpublic中身（npm installで自動的にcopyされるのでgithub共有不要）
+public/pyodide
+
+>>>>>>> main
 # ログ & キャッシュ (Logs & Caches)
 logs/
 *.log
