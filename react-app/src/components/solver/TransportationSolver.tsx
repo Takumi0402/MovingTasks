@@ -22,12 +22,10 @@ export const TransportationSolver = () => {
 
     const categoryOptions = data ? Array.from(data.objectCategories.values()) : [];
     const allTasks = data?.tasks ? Array.from(data.tasks.values()) : [];
-    const filteredTasks = displayCategory === "all"
-        ? allTasks
-        : allTasks.filter((t) => t.object.key === displayCategory);
+    const filteredTasks = displayCategory === "all" ? allTasks : allTasks.filter((t) => t.object.key === displayCategory);
 
     const handleCategoryToggle = (key: string, checked: boolean) => {
-        setSelectedCategoryKeys((prev) => checked ? [...prev, key] : prev.filter((k) => k !== key));
+        setSelectedCategoryKeys((prev) => (checked ? [...prev, key] : prev.filter((k) => k !== key)));
     };
 
     const statusLabel = (status: string) => {
@@ -49,11 +47,7 @@ export const TransportationSolver = () => {
                         <div className="solver-checkboxes">
                             {categoryOptions.map((cat) => (
                                 <label key={cat.key} className="solver-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedCategoryKeys.includes(cat.key)}
-                                        onChange={(e) => handleCategoryToggle(cat.key, e.target.checked)}
-                                    />
+                                    <input type="checkbox" checked={selectedCategoryKeys.includes(cat.key)} onChange={(e) => handleCategoryToggle(cat.key, e.target.checked)} />
                                     <span>{cat.name}</span>
                                 </label>
                             ))}
@@ -62,37 +56,19 @@ export const TransportationSolver = () => {
 
                     <div className="solver-field">
                         <label className="solver-field__label">タスクペナルティ</label>
-                        <input
-                            type="number"
-                            value={penalty}
-                            onChange={(e) => setPenalty(Number(e.target.value))}
-                            onFocus={handleFocus}
-                        />
+                        <input type="number" value={penalty} onChange={(e) => setPenalty(Number(e.target.value))} onFocus={handleFocus} />
                     </div>
 
                     <div className="solver-field">
                         <label className="solver-field__label">計算時間の上限（秒）</label>
-                        <input
-                            type="number"
-                            value={timeLimit}
-                            min="1"
-                            onChange={(e) => setTimeLimit(Number(e.target.value))}
-                            onFocus={handleFocus}
-                        />
+                        <input type="number" value={timeLimit} min="1" onChange={(e) => setTimeLimit(Number(e.target.value))} onFocus={handleFocus} />
                     </div>
 
                     <div className="solver-actions">
-                        <button
-                            className="btn-primary"
-                            onClick={() => solveTransportationProblemFast(penalty, timeLimit, selectedCategoryKeys)}
-                            disabled={isSolving || selectedCategoryKeys.length === 0}
-                        >
+                        <button className="btn-primary" onClick={() => solveTransportationProblemFast(penalty, timeLimit, selectedCategoryKeys)} disabled={isSolving || selectedCategoryKeys.length === 0}>
                             {isSolving ? "計算中..." : "指定時間内で計算"}
                         </button>
-                        <button
-                            onClick={() => solveTransportationProblem(penalty, selectedCategoryKeys)}
-                            disabled={isSolving || selectedCategoryKeys.length === 0}
-                        >
+                        <button onClick={() => solveTransportationProblem(penalty, selectedCategoryKeys)} disabled={isSolving || selectedCategoryKeys.length === 0}>
                             {isSolving ? "計算中..." : "完全解を計算"}
                         </button>
                     </div>
@@ -108,24 +84,14 @@ export const TransportationSolver = () => {
                         <div className="solver-summary card">
                             <div className="card-header solver-summary__header">
                                 <h2 className="solver-settings__title">計算結果サマリー</h2>
-                                <button
-                                    onClick={() => exportToExcel(
-                                        solverResult,
-                                        data ? new Map(data.objectCategories) : new Map(),
-                                        penalty, timeLimit, selectedCategoryKeys, ""
-                                    )}
-                                >
-                                    Excelにエクスポート
-                                </button>
+                                <button onClick={() => exportToExcel(solverResult, data ? new Map(data.objectCategories) : new Map(), penalty, timeLimit, selectedCategoryKeys, "")}>Excelにエクスポート</button>
                             </div>
                             <div className="solver-summary__list">
                                 {solverResult.map((result) => {
                                     const { text, cls } = statusLabel(result.status);
                                     return (
                                         <div key={result.objectKey} className="solver-summary__item">
-                                            <span className="solver-summary__name">
-                                                {data?.objectCategories.get(result.objectKey)?.name || result.objectKey}
-                                            </span>
+                                            <span className="solver-summary__name">{data?.objectCategories.get(result.objectKey)?.name || result.objectKey}</span>
                                             <span className={`badge ${cls}`}>{text}</span>
                                             {["Optimal", "Feasible"].includes(result.status) && (
                                                 <span className="solver-summary__meta">
@@ -141,14 +107,12 @@ export const TransportationSolver = () => {
                         <div className="solver-tasks card">
                             <div className="card-header solver-tasks__header">
                                 <h2 className="solver-settings__title">生成されたタスク（{filteredTasks.length}件）</h2>
-                                <select
-                                    value={displayCategory}
-                                    onChange={(e) => setDisplayCategory(e.target.value)}
-                                    style={{ width: "auto" }}
-                                >
+                                <select value={displayCategory} onChange={(e) => setDisplayCategory(e.target.value)} style={{ width: "auto" }}>
                                     <option value="all">すべて表示</option>
                                     {categoryOptions.map((cat) => (
-                                        <option key={cat.key} value={cat.key}>{cat.name}</option>
+                                        <option key={cat.key} value={cat.key}>
+                                            {cat.name}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
@@ -171,9 +135,9 @@ export const TransportationSolver = () => {
                     </>
                 ) : (
                     <div className="solver-placeholder card">
-                        <div className="no-data-icon">⚡</div>
                         <p className="no-data-title">計算結果がありません</p>
-                        <p className="no-data-desc">左のパネルから設定を行い、計算を実行してください。</p>
+                        <p className="no-data-desc">左のパネルから設定を行い計算を実行してください。</p>
+                        <p className="no-data-desc">計算時間はタイムアウトを考慮して15分以下に設定してください。</p>
                     </div>
                 )}
             </div>

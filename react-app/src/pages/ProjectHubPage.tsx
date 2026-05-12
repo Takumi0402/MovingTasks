@@ -24,11 +24,9 @@ export const ProjectHubPage = () => {
         <div className="hub-page">
             {/* ===== ヒーローセクション ===== */}
             <div className="hub-hero">
-                <div className="hub-hero__badge">矢上祭 2025</div>
+                <div className="hub-hero__badge">矢上祭 2025→2026</div>
                 <h1 className="hub-hero__title">机椅子輸送最適化プロジェクト</h1>
-                <p className="hub-hero__desc">
-                    キャンパス内の机・椅子の移動タスクを、線形計画法とダイクストラ法を用いて自動最適化するシステム。
-                </p>
+                <p className="hub-hero__desc">キャンパス内の机・椅子の移動タスクを、自動で最適化するためのシステム。</p>
             </div>
 
             {/* ===== プロジェクト操作パネル ===== */}
@@ -84,15 +82,9 @@ export const ProjectHubPage = () => {
                     <div className="hub-import">
                         <div className="hub-import__icon">📁</div>
                         <h2 className="hub-import__title">プロジェクトを開始する</h2>
-                        <p className="hub-import__desc">
-                            既存のプロジェクトファイル（.zip）を読み込むか、新規プロジェクトを作成してください。
-                        </p>
+                        <p className="hub-import__desc">既存のプロジェクトファイル（.zip）を読み込むか、新規プロジェクトを作成してください。</p>
                         <div className="hub-import__actions">
-                            <button
-                                className="btn-primary"
-                                onClick={() => fileInputRef.current?.click()}
-                                disabled={isLoading}
-                            >
+                            <button className="btn-primary" onClick={() => fileInputRef.current?.click()} disabled={isLoading}>
                                 ZIPファイルを読み込む
                             </button>
                             <button onClick={createNewProject} disabled={isLoading}>
@@ -101,13 +93,7 @@ export const ProjectHubPage = () => {
                         </div>
                     </div>
                 )}
-                <input
-                    type="file"
-                    accept=".zip"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                />
+                <input type="file" accept=".zip" ref={fileInputRef} onChange={handleFileChange} style={{ display: "none" }} />
             </div>
 
             {/* ===== アルゴリズム説明セクション ===== */}
