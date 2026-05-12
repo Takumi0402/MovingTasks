@@ -12,6 +12,8 @@ origins = [
     "http://localhost:5173",
     "https://yagamifes-it.github.io/MovingTasks",
     "https://yagamifes-it.github.io",
+    "https://takumi0402.github.io",
+    "https://takumi0402.github.io/MovingTasks"
 ]
 
 app.add_middleware(

@@ -1,5 +1,7 @@
 __pycache__
-<<<<<<< HEAD
-=======
 venv
->>>>>>> main
+dist/
+react-app/dist/
+.DS_Store
+*.env
+node_modules/
