@@ -5,7 +5,7 @@
 ## 1. 背景と課題
 
 総務局が扱う机椅子の移動は，拠点数・経路数・備品数が多くなるほど手作業での管理が難しくなる．
-以下のような問題が存在した．
+具体的に以下のような問題が存在した．
 
 - 移動表を作成するのは無数の組み合わせから正解を選ぶ作業であり，勘と経験だよりの職人技である
 - 人間だと動的な変化に対応するのが難しい
@@ -18,6 +18,10 @@
 Frontend URL: https://takumi0402.github.io/MovingTasks/
 
 Backend URL: https://movingtasks-pythonapi.onrender.com/
+
+サンプルデータ (mapdata_sample.zip): [mapdata_sample.zip](mapdata_sample.zip)
+
+
 
 ### キャンパス編集
 
@@ -89,8 +93,6 @@ Backend URL: https://movingtasks-pythonapi.onrender.com/
 ### タスク最適化
 
 移動計画は，混合整数計画問題として扱い，分枝限定法と線形緩和を使って解いている（バックエンド）．
-
-![ダイクストラ法の説明画像](image_dijkstra.jpg)
 
 ## 7. 開発・デバッグ
 
