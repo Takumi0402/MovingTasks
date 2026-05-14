@@ -20,8 +20,7 @@ Frontend URL: https://takumi0402.github.io/MovingTasks/
 Backend URL: https://movingtasks-pythonapi.onrender.com/
 
 サンプルデータ (mapdata_sample.zip): [mapdata_sample.zip](mapdata_sample.zip)
-
-
+（※フロント画面右上のインポートボタンからインポートして使用可）
 
 ### キャンパス編集
 
